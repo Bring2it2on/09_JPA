@@ -135,4 +135,76 @@ public class SimpleJPQLTests {
         menuList.forEach(System.out::println);
     }
 
+    @DisplayName("Query를 이용한 다중행 조회 테스트")
+    @Test
+    public void test5() {
+
+        //given
+
+        //when
+        String jpql = "select m from menu_section01 m";
+
+        Query query = entityManager.createQuery(jpql);
+
+        List<Menu> menuList = query.getResultList(); // 결과 반환
+
+        //then
+        assertNotNull(menuList);
+
+        menuList.forEach(System.out::println);
+    }
+
+    @DisplayName("distinct를 사용한 중복제거 여러 행 조회 테스트")
+    @Test
+    public void test6() {
+
+        //given
+
+        //when
+        String jpql = "select distinct m.categoryCode from menu_section01 m";
+
+        TypedQuery<Integer> query = entityManager.createQuery(jpql,Integer.class);
+
+        List<Integer> categoryList = query.getResultList();
+
+        //then
+        assertNotNull(categoryList);
+        categoryList.forEach(System.out::println);
+    }
+
+    @DisplayName("in 연산자를 활용한 조회 테스트")
+    @Test
+    public void test7() {
+
+        //given
+
+        //when
+        String jpql
+                = "select m from menu_section01 m where m.categoryCode in(6,7) " +
+                "order by m.menuCode desc";
+
+        List<Menu> menuList = entityManager.createQuery(jpql,Menu.class).getResultList();
+
+        //then
+        assertNotNull(menuList);
+        menuList.forEach(System.out::println);
+    }
+
+    @DisplayName("like 연산자를 활용한 조회 테스트")
+    @Test
+    public void test8() {
+
+        //given
+
+        //when
+        String jpql
+                = "select m from menu_section01 m where m.menuName like '%마늘%'";
+
+        List<Menu> menuList = entityManager.createQuery(jpql,Menu.class).getResultList();
+
+        //then
+        assertNotNull(menuList);
+        menuList.forEach(System.out::println);
+    }
+
 }
